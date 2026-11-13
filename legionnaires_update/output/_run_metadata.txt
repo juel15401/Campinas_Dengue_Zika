@@ -1,0 +1,6 @@
+run_date: 2026-11-13
+study_window: 2023-01-01 to 2025-12-31
+acs_year: 2023
+svi_year: 2022
+pep_vintage_requested: 2025
+R: R version 4.3.3 (2024-02-29)

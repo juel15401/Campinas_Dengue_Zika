@@ -1,0 +1,46 @@
+00:37:50  Gazetteer: counties
+00:37:50  Gazetteer: tracts
+00:37:50  wrote output/geo_county.csv  (72 rows x 7 cols)
+00:37:50  wrote output/geo_tract.csv  (1542 rows x 7 cols)
+00:37:50  ACS: no CENSUS_API_KEY set -> skipping (SVI covers core SES vars). Get a free key at https://api.census.gov/data/key_signup.html
+00:37:50  SVI 2022: tracts + counties
+00:37:51  wrote output/svi_county.csv  (72 rows x 35 cols)
+00:37:51  wrote output/svi_tract.csv  (1528 rows x 36 cols)
+00:37:51  PLACES: counties
+00:37:51  wrote output/places_county.csv  (72 rows x 21 cols)
+00:37:51  PLACES: tracts (~61k rows, paged)
+00:37:54  wrote output/places_tract.csv  (1525 rows x 22 cols)
+00:37:54  RUCC 2023
+00:37:54  wrote output/rucc_county.csv  (72 rows x 5 cols)
+00:37:54  SDWIS: water systems (WI primacy)
+00:38:09  SDWIS: geographic areas served
+00:38:15  wrote output/sdwis_systems_wi.csv  (24781 rows x 15 cols)
+00:38:15  wrote output/sdwis_county.csv  (71 rows x 10 cols)
+00:38:15  FRS: WI state file (~25 MB)
+00:38:16  wrote output/frs_facilities_wi.csv  (3301 rows x 12 cols)
+00:38:16  wrote output/frs_county.csv  (71 rows x 20 cols)
+00:38:16  wrote output/frs_tract.csv  (889 rows x 20 cols)
+00:38:16  Weather: 72 counties, 2022-11-17 to 2025-12-31  (~1 min per 6 counties; chunks are cached so reruns resume)
+00:39:54  wrote output/weather_county_daily.csv  (82152 rows x 16 cols)
+00:39:55  Storm events: StormEvents_details-ftp_v1.0_d2022_c20260625.csv.gz
+00:39:56  Storm events: StormEvents_details-ftp_v1.0_d2023_c20260323.csv.gz
+00:39:57  Storm events: StormEvents_details-ftp_v1.0_d2024_c20260728.csv.gz
+00:39:58  Storm events: StormEvents_details-ftp_v1.0_d2025_c20260819.csv.gz
+00:40:00  wrote output/storm_events_wi.csv  (5347 rows x 15 cols)
+00:40:00  PEP vintage 2025: county x year x age
+00:40:00  wrote output/pep_county_year_age.csv  (7776 rows x 5 cols)
+00:40:00  wrote output/pep_county.csv  (72 rows x 5 cols)
+00:40:00  CMS hospitals (WI)
+00:40:00  wrote output/cms_hospitals_wi.csv  (143 rows x 8 cols)
+00:40:00  HRSA HPSA primary care (~50 MB)
+00:40:01  Distance: tract centre of population -> nearest general hospital
+00:40:01  wrote output/access_tract.csv  (1542 rows x 3 cols)
+00:40:01  wrote output/access_county.csv  (72 rows x 8 cols)
+00:40:01  wrote output/covariates_county.csv  (72 rows x 106 cols)
+00:40:01  wrote output/covariates_tract.csv  (1542 rows x 87 cols)
+00:40:01  STEP 1 complete. Files in ./output
+Warning message:
+One or more parsing issues, call `problems()` on your data frame for details,
+e.g.:
+  dat <- vroom(...)
+  problems(dat) 

@@ -991,14 +991,14 @@ build_case_covariates <- function(cases,
              cover_end   = as.Date(paste0(format(max(st$begin_date), "%Y"), "-12-31")))
     for (w in intersect(c("0_14", "15_28"), names(lag_windows))) {
       lags <- lag_windows[[w]]
-      agg <- key %>% mutate(w_start = anchor_date - max(lags), w_end = anchor_date - min(lags)) %>%
+      agg <- key %>% mutate(w_start = anchor_date - max(lags), w_end = anchor_date - min(lags), cty_ok = !is.na(county_fips)) %>%
         left_join(st, by = "county_fips", relationship = "many-to-many") %>%
         mutate(hit = !is.na(begin_date) & begin_date <= w_end & end_date >= w_start) %>%
-        group_by(case_id, w_start, w_end) %>%
+        group_by(case_id, w_start, w_end, cty_ok) %>%
         summarise(n_all   = sum(hit),
                   n_flood = sum(hit & event_type %in% c("Flood","Flash Flood","Heavy Rain")),
                   n_heat  = sum(hit & event_type %in% c("Excessive Heat","Heat")), .groups = "drop") %>%
-        mutate(ok = !is.na(w_start) & w_start >= cov$cover_start & w_end <= cov$cover_end,
+        mutate(ok = cty_ok & !is.na(w_start) & w_start >= cov$cover_start & w_end <= cov$cover_end,
                across(c(n_all, n_flood, n_heat), ~ if_else(ok, as.numeric(.x), NA_real_))) %>%
         transmute(case_id, !!paste0("storm_n_events_lag", w) := n_all,
                   !!paste0("storm_n_flood_lag", w) := n_flood, !!paste0("storm_n_heat_lag", w) := n_heat)
@@ -1158,6 +1158,7 @@ make_analysis_file <- function(x, keep_geo = c("county", "none"), date_detail = 
   # small-cell report
   cat_cols <- names(x)[vapply(x, function(v) (is.character(v) || is.factor(v) || is.logical(v)) &&
                                 length(unique(v)) <= 20, logical(1))]
+  cat_cols <- grep("^(c|t)_", cat_cols, value = TRUE, invert = TRUE)   # area descriptors, not case attributes
   sc <- do.call(rbind, lapply(cat_cols, function(cc) {
     t <- table(x[[cc]], useNA = "no"); t <- t[t > 0 & t < CONFIG$small_cell]
     if (length(t)) data.frame(variable = cc, level = names(t), n = as.integer(t)) else NULL

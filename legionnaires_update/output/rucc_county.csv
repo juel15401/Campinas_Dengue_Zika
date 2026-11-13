@@ -1,0 +1,73 @@
+county_fips,population_2020,rucc_2023,description,rucc_metro
+55001,20654,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55003,16027,7,"Nonmetro - Urban population of 5,000 to 20,000, not adjacent to a metro area",0
+55005,46711,6,"Nonmetro - Urban population of 5,000 to 20,000, adjacent to a metro area",0
+55007,16220,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55009,268740,2,"Metro - Counties in metro areas of 250,000 to 1 million population",1
+55011,13317,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55013,16526,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55015,52442,3,"Metro - Counties in metro areas of fewer than 250,000 population",1
+55017,66297,3,"Metro - Counties in metro areas of fewer than 250,000 population",1
+55019,34659,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55021,58490,2,"Metro - Counties in metro areas of 250,000 to 1 million population",1
+55023,16113,6,"Nonmetro - Urban population of 5,000 to 20,000, adjacent to a metro area",0
+55025,561504,2,"Metro - Counties in metro areas of 250,000 to 1 million population",1
+55027,89396,4,"Nonmetro - Urban population of 20,000 or more, adjacent to a metro area",0
+55029,30066,6,"Nonmetro - Urban population of 5,000 to 20,000, adjacent to a metro area",0
+55031,44295,2,"Metro - Counties in metro areas of 250,000 to 1 million population",1
+55033,45440,6,"Nonmetro - Urban population of 5,000 to 20,000, adjacent to a metro area",0
+55035,105710,3,"Metro - Counties in metro areas of fewer than 250,000 population",1
+55037,4558,9,"Nonmetro - Urban population of fewer than 5,000, not adjacent to a metro area",0
+55039,104154,3,"Metro - Counties in metro areas of fewer than 250,000 population",1
+55041,9179,9,"Nonmetro - Urban population of fewer than 5,000, not adjacent to a metro area",0
+55043,51938,6,"Nonmetro - Urban population of 5,000 to 20,000, adjacent to a metro area",0
+55045,37093,2,"Metro - Counties in metro areas of 250,000 to 1 million population",1
+55047,19018,6,"Nonmetro - Urban population of 5,000 to 20,000, adjacent to a metro area",0
+55049,23709,2,"Metro - Counties in metro areas of 250,000 to 1 million population",1
+55051,6137,9,"Nonmetro - Urban population of fewer than 5,000, not adjacent to a metro area",0
+55053,21145,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55055,84900,4,"Nonmetro - Urban population of 20,000 or more, adjacent to a metro area",0
+55057,26718,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55059,169151,3,"Metro - Counties in metro areas of fewer than 250,000 population",1
+55061,20563,2,"Metro - Counties in metro areas of 250,000 to 1 million population",1
+55063,120784,3,"Metro - Counties in metro areas of fewer than 250,000 population",1
+55065,16611,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55067,19491,6,"Nonmetro - Urban population of 5,000 to 20,000, adjacent to a metro area",0
+55069,28415,6,"Nonmetro - Urban population of 5,000 to 20,000, adjacent to a metro area",0
+55071,81359,4,"Nonmetro - Urban population of 20,000 or more, adjacent to a metro area",0
+55073,138013,3,"Metro - Counties in metro areas of fewer than 250,000 population",1
+55075,41872,6,"Nonmetro - Urban population of 5,000 to 20,000, adjacent to a metro area",0
+55077,15592,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55078,4255,9,"Nonmetro - Urban population of fewer than 5,000, not adjacent to a metro area",0
+55079,939489,1,Metro - Counties in metro areas of 1 million population or more,1
+55081,46274,4,"Nonmetro - Urban population of 20,000 or more, adjacent to a metro area",0
+55083,38965,2,"Metro - Counties in metro areas of 250,000 to 1 million population",1
+55085,37845,7,"Nonmetro - Urban population of 5,000 to 20,000, not adjacent to a metro area",0
+55087,190705,3,"Metro - Counties in metro areas of fewer than 250,000 population",1
+55089,91503,1,Metro - Counties in metro areas of 1 million population or more,1
+55091,7318,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55093,42212,1,Metro - Counties in metro areas of 1 million population or more,1
+55095,44977,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55097,70377,4,"Nonmetro - Urban population of 20,000 or more, adjacent to a metro area",0
+55099,14054,9,"Nonmetro - Urban population of fewer than 5,000, not adjacent to a metro area",0
+55101,197727,3,"Metro - Counties in metro areas of fewer than 250,000 population",1
+55103,17304,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55105,163687,3,"Metro - Counties in metro areas of fewer than 250,000 population",1
+55107,14188,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55109,93536,1,Metro - Counties in metro areas of 1 million population or more,1
+55111,65763,4,"Nonmetro - Urban population of 20,000 or more, adjacent to a metro area",0
+55113,18074,9,"Nonmetro - Urban population of fewer than 5,000, not adjacent to a metro area",0
+55115,40881,6,"Nonmetro - Urban population of 5,000 to 20,000, adjacent to a metro area",0
+55117,118034,3,"Metro - Counties in metro areas of fewer than 250,000 population",1
+55119,19913,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55121,30760,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55123,30714,3,"Metro - Counties in metro areas of fewer than 250,000 population",1
+55125,23047,9,"Nonmetro - Urban population of fewer than 5,000, not adjacent to a metro area",0
+55127,106478,4,"Nonmetro - Urban population of 20,000 or more, adjacent to a metro area",0
+55129,16623,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55131,136761,1,Metro - Counties in metro areas of 1 million population or more,1
+55133,406978,1,Metro - Counties in metro areas of 1 million population or more,1
+55135,51812,6,"Nonmetro - Urban population of 5,000 to 20,000, adjacent to a metro area",0
+55137,24520,8,"Nonmetro - Urban population of fewer than 5,000, adjacent to a metro area",0
+55139,171730,3,"Metro - Counties in metro areas of fewer than 250,000 population",1
+55141,74207,4,"Nonmetro - Urban population of 20,000 or more, adjacent to a metro area",0
