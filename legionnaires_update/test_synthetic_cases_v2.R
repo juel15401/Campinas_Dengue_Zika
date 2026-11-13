@@ -42,14 +42,19 @@ print(head(cov[, c("case_id", "county_fips", "anchor_date", "anchor_source", "c_
                    "c_hosp_n_cah", "c_hpsa_pc_any", "t_dist_km_nearest_hospital",
                    "wx_precipitation_sum_sum_lag0_14", "storm_n_flood_lag0_14", "mmwr_week")], 8))
 
-share <- make_analysis_file(cov, seed = 1)
+share <- make_analysis_file(cov, seed = 1)                       # default: tract + month
+stopifnot("tract_geoid" %in% names(share), !"onset_date" %in% names(share), "anchor_month" %in% names(share))
+share_cty <- make_analysis_file(cov, keep_geo = "county", date_detail = "year", seed = 1)
+stopifnot(!"tract_geoid" %in% names(share_cty), any(grepl("_q5$", names(share_cty))))
+share_dt <- make_analysis_file(cov, date_detail = "date", seed = 1)
+stopifnot("onset_or_anchor_date" %in% names(share_dt))
 cat("shared file:", nrow(share), "rows x", ncol(share), "cols\n")
-left <- intersect(names(share), c("first_name", "last_name", "street_address", "phone", "dob", "tract_geoid",
+left <- intersect(names(share), c("first_name", "last_name", "street_address", "phone", "dob",
                                   "case_id", "onset_date", "admit_date", "anchor_date"))
 cat("identifier/date columns remaining:", if (length(left)) left else "none", "\n")
 stopifnot(!length(left))
-print(head(share[, c("study_id", "age", "sex", "county_fips", "anchor_year", "admit_day", "discharge_day",
-                     "death_day", "los_days", grep("_q5$", names(share), value = TRUE)[1:2])], 5))
+print(head(share[, c("study_id", "age", "sex", "tract_geoid", "anchor_year", "anchor_month", "admit_day",
+                     "discharge_day", "death_day", "los_days", "t_svi_rpl_themes")], 5))
 
 rt <- county_rates(cases, age_col = "age")
 cat("county_rates rows:", nrow(rt), " sum cases:", sum(rt$cases), " sum expected:", round(sum(rt$expected), 2), "\n")

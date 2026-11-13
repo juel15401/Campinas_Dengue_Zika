@@ -50,21 +50,26 @@ bad-county case has county covariates? FALSE
 6                             15.1                     0         2
 7                               NA                    NA        31
 8                             63.2                     1         9
+make_analysis_file(): dropping 12 column(s): first_name, last_name, street_address, phone, dob, county_raw, onset_date, specimen_collection_date, admit_date, discharge_date, death_date, anchor_date
+Re-identification check on {tract_geoid, anchor_month, anchor_year, sex, age/10}: 60 of 60 records are unique (k = 1) - consider date_detail = 'year' or keep_geo = 'county' if DHS requires k > 1
 make_analysis_file(): dropping 13 column(s): first_name, last_name, street_address, phone, dob, county_raw, onset_date, specimen_collection_date, admit_date, discharge_date, death_date, anchor_date, tract_geoid
-shared file: 60 rows x 295 cols
+Re-identification check on {county_fips, anchor_year, sex, age/10}: 48 of 60 records are unique (k = 1) - consider date_detail = 'year' or keep_geo = 'county' if DHS requires k > 1
+make_analysis_file(): dropping 12 column(s): first_name, last_name, street_address, phone, dob, county_raw, onset_date, specimen_collection_date, admit_date, discharge_date, death_date, anchor_date
+Re-identification check on {tract_geoid, onset_or_anchor_date, anchor_month, anchor_year, sex, age/10}: 60 of 60 records are unique (k = 1) - consider date_detail = 'year' or keep_geo = 'county' if DHS requires k > 1
+shared file: 60 rows x 312 cols
 identifier/date columns remaining: none 
-   study_id age sex county_fips anchor_year admit_day discharge_day death_day
-4    LD0001  90   M       55109        2023         3             7        NA
-48   LD0002  83   F       55079        2023         3             8        NA
-30   LD0003  84   F       55139        2023         3             9        NA
-2    LD0004  43   M       55133        2024         3             7        NA
-60   LD0005  35   M       55005        2025         3             9        NA
-   los_days t_aland_km2_q5 t_awater_km2_q5
-4         4              4               3
-48        5              2               1
-30        6              5               4
-2         4              2               1
-60        6              5               3
+   study_id age sex tract_geoid anchor_year anchor_month admit_day
+4    LD0001  90   M 55109120501        2023            5         3
+48   LD0002  83   F 55079100700        2023            9         3
+30   LD0003  84   F 55139002100        2023            7         3
+2    LD0004  43   M 55133203103        2024           11         3
+60   LD0005  35   M 55005001001        2025            7         3
+   discharge_day death_day los_days t_svi_rpl_themes
+4              7        NA        4           0.5696
+48             8        NA        5           0.6958
+30             9        NA        6           0.1741
+2              7        NA        4           0.4731
+60             9        NA        6           0.4908
 1 case(s) dropped from rates (missing age, county or date)
 county_rates rows: 72  sum cases: 59  sum expected: 59 
 # A tibble: 5 x 13

@@ -128,17 +128,17 @@ text(s, 7.0, 1.85, 5.8, 4.9, [
     ("Wisconsin now sees 200+ cases a year, and the January 2023 interview-form restructure gives three years of consistently structured WEDSS data.", {"bullet": True, "size": 16}),
     ("Findings feed DHS directly: which settings to prioritise for water-management follow-up.", {"bullet": True, "size": 16}),
 ], spacing=8)
-notes(s, "Decided 9/24 with Francis: confirmed cases only; severity is primary; site-visit environmental data most likely out of scope.")
+notes(s, "Decided 9/24 with Frances: confirmed cases only; severity is primary; site-visit environmental data most likely out of scope.")
 
 # ---------------------------------------------------------------- 3 what changed: access
-s = prs.slides.add_slide(BLANK); header(s, "What's new: I may get direct access, so the workflow changes", "Data update", 3)
-text(s, 0.6, 1.65, 12.2, 0.8, ["DHS may give me access as long as the file carries no personal information. Then you don't have to run "
-                               "everything for me. Anything identifiable stays inside DHS, and only a de-identified analysis file comes out."],
+s = prs.slides.add_slide(BLANK); header(s, "What's new: DHS cleared sharing without PII, at census tract", "Data update", 3)
+text(s, 0.6, 1.65, 12.2, 0.8, ["After the Nov 3 DHS data-sharing call: you can share anything without personally identifiable information, and census tract is "
+                               "the resolution to use. Code sharing is fine. So: identifiers stay inside DHS, and a de-identified tract-level file comes to me."],
      size=17, color=GREY)
 # flow boxes
 y = 2.85
 box(s, 0.6, y, 7.6, 3.65, fill=None, line=RED)
-text(s, 0.75, y + 0.08, 7.3, 0.4, ["INSIDE DHS  (Rachel / Francis run these — about 10 minutes)"], size=13, bold=True, color=RED)
+text(s, 0.75, y + 0.08, 7.3, 0.4, ["INSIDE DHS  (Rachel runs these — about 10 minutes)"], size=13, bold=True, color=RED)
 steps = [("1", "check_case_input(cases)", "Aggregate QA: duplicates, unmatched counties/tracts, date gaps"),
          ("2", "build_case_covariates(cases)", "Joins county/tract SES, access, weather, storms (no network)"),
          ("3", "make_analysis_file(cov)", "Drops identifiers; turns dates into day-counts; random study ID"),
@@ -154,13 +154,14 @@ arrow.fill.solid(); arrow.fill.fore_color.rgb = GREY; arrow.line.fill.background
 box(s, 9.3, y, 3.45, 3.65, fill=LIGHT)
 text(s, 9.45, y + 0.08, 3.2, 3.5, [
     ("LEAVES DHS", {"size": 13, "bold": True, "color": TEAL}),
-    ("De-identified file: age (top-coded at 90), sex, race/ethnicity, conditions, exposure, outcomes as day-counts, "
-     "year, county, and area covariates", {"size": 13.5}),
-    ("Aggregate county rate table (small cells flagged)", {"size": 13.5}),
-    ("Never leaves: names, addresses, DOB, MRN, exact dates, tract IDs", {"size": 13.5, "bold": True}),
+    ("De-identified file: census tract, onset year and month, age (top-coded at 90), sex, race/ethnicity, conditions, "
+     "exposure, outcomes as day-counts, area covariates", {"size": 13}),
+    ("Aggregate county rate table (small cells flagged)", {"size": 13}),
+    ("Never leaves: names, addresses, DOB, MRN, exact dates (unless DHS OKs onset date)", {"size": 13, "bold": True}),
 ], spacing=9)
 notes(s, "The public data (step 1) are pulled outside DHS and copied in; nothing about cases is ever sent out. "
-         "Confirm with DHS who signs off on the de-identification rules: small-cell threshold, date detail, geography.")
+         "Nov 3 call attendees: Frances Goglio, Jennifer Comeau, Jordan Mason (DHS), Rachel, Johnny. Rachel's summary (Teams, Nov 10): "
+         "anything without PII; census tract; periodic check-ins with DHS on code and analysis.")
 
 # ---------------------------------------------------------------- 4 fixes
 s = prs.slides.add_slide(BLANK); header(s, "Problems in the November code that would have bitten us, now fixed", "Code update (v2)", 4)
@@ -176,7 +177,7 @@ table(s, 0.6, 1.7, 12.1, rows, [3.4, 4.5, 4.2], size=13, row_h=0.6)
 notes(s, "All re-tested on synthetic cases. The public pull was re-run in full on 2026-11-13.")
 
 # ---------------------------------------------------------------- 5 external layers
-s = prs.slides.add_slide(BLANK); header(s, "Public data attached to each case (county; tract if allowed)", "External covariates", 5)
+s = prs.slides.add_slide(BLANK); header(s, "Public data attached to each case (county and census tract)", "External covariates", 5)
 rows = [["Layer (source)", "Examples", "Severity aim", "Spatial aim"],
         ["Social vulnerability (CDC SVI 2022; ACS with key)", "poverty, uninsured, % 65+, race/ethnicity, housing", "Confounder / effect modifier", "●"],
         ["Health status (CDC PLACES)", "smoking, COPD, diabetes, CKD prevalence", "Area proxy if WEDSS fields are sparse", "●"],
@@ -186,7 +187,7 @@ rows = [["Layer (source)", "Examples", "Severity aim", "Spatial aim"],
         ["Weather (ERA5-Land) and storms (NOAA)", "rain, humidity, heat in the 0–14 days before onset", "○", "●  case-crossover"],
         ["Water systems (EPA SDWIS) and facilities (EPA FRS)", "surface water, cooling-tower proxies", "○", "●"]]
 table(s, 0.6, 1.7, 12.1, rows, [3.6, 4.1, 2.5, 1.9], size=13, row_h=0.56)
-text(s, 0.6, 6.35, 12, 0.5, ["● = main use   ○ = secondary use.   Tract-level values leave DHS only as statewide quintiles, because an exact tract value identifies the tract as surely as its ID."],
+text(s, 0.6, 6.35, 12, 0.5, ["● = main use   ○ = secondary use.   With tract cleared, exact tract values are kept; if DHS later prefers county, the code turns tract values into statewide quintiles."],
      size=12.5, color=GREY)
 
 # ---------------------------------------------------------------- 6 WEDSS variables
@@ -252,12 +253,12 @@ text(s, 7.4, 1.85, 5.4, 4.8, [
 
 # ---------------------------------------------------------------- 9 missing data & bias
 s = prs.slides.add_slide(BLANK); header(s, "Missing data and bias: the decisions to make", "Data quality", 9)
-items = [("Missing discharge dates", "~60 per year in 2023–24; probably longer stays",
-          "Option A: Francis backfills (40+ per year recoverable?).  Option B: multiple imputation using ICU, ventilation, age and death (coded in the template).  Report both if feasible."),
+items = [("Missing discharge dates", "30–40% missing 2023–24; ~7% in 2025 (WISH)",
+          "Frances has already backfilled more 2024 dates. Open: is 2023 worth it? Missing stays are probably longer. Backfill if cheap; otherwise multiple imputation (ICU, ventilation, age, death; coded in the template). Report both."),
          ("Interview completeness", "61% among deaths vs 85% overall",
           "Keep “not interviewed” as its own exposure level. Sensitivity checks: interviewed cases only, imputed exposure, and a simple bias analysis."),
-         ("Race/ethnicity and SES", "raised at the committee meeting (T)",
-          "Individual race/ethnicity plus area SVI or poverty and insurance. Decide a priori whether each is a confounder or a disparity outcome. Draw a DAG."),
+         ("Race/ethnicity and SES", "Black residents ~19% of cases vs 6–7% of WI",
+          "A large disparity, so race is not just a nuisance confounder. Use individual race/ethnicity plus tract SVI, poverty and insurance; decide a priori what is confounder vs pathway. Draw the DAG."),
          ("2023 form restructure", "start of a consistent data period",
           "Check that exposure questions mean the same thing in 2023, 2024 and 2025. Include year in models.")]
 for i, (t, sub, body) in enumerate(items):
@@ -280,18 +281,19 @@ text(s, 6.9, 1.75, 6.0, 5.0, [
     ("Randomized-polygon / masked dot maps", {"size": 18, "bold": True}),
     ("geomask_cases.R: each case gets a random point inside its county or tract, optionally weighted to populated census blocks.", {"bullet": True, "size": 15.5}),
     ("If DHS geocodes addresses, use donut masking instead: each point moves a random distance that scales with density, stays in its county, and hides among 50 or more residents.", {"bullet": True, "size": 15.5}),
-    ("Spatial resolution: county by default; tract only if DHS approves. Who decides that is still an open question for DHS.", {"bullet": True, "size": 15.5}),
+    ("Resolution: census tract (DHS, Nov 2026). Posters and public maps may still need county or masked dots; confirm with DHS.", {"bullet": True, "size": 15.5}),
 ], spacing=7)
 
 # ---------------------------------------------------------------- 11 next steps
 s = prs.slides.add_slide(BLANK); header(s, "To decide next week, and to do before the January meeting", "Next steps", 11)
 text(s, 0.6, 1.75, 6.0, 5.2, [
-    ("Questions for DHS / Francis", {"size": 19, "bold": True, "color": RED}),
-    ("What exactly counts as “no personal information”? Are year and month OK? County? Tract quintiles?", {"bullet": True, "size": 15.5}),
-    ("Small-cell threshold (<5 or <11) for tables and maps", {"bullet": True, "size": 15.5}),
-    ("Does WEDSS geocode residence to tract? Which vintage?", {"bullet": True, "size": 15.5}),
-    ("Backfill the 2023–24 discharge dates: yes or no, and by when?", {"bullet": True, "size": 15.5}),
-    ("Can we pull the fields on slide 6 (interview status, test method, ICU, disposition)?", {"bullet": True, "size": 15.5}),
+    ("Questions for DHS (Frances / Jordan)", {"size": 19, "bold": True, "color": RED}),
+    ("Exact onset dates: PII or not? tract + month + sex + age band will likely make nearly every case unique (k = 1)", {"bullet": True, "size": 15}),
+    ("Small-cell threshold (<5 or <11) for tables and maps", {"bullet": True, "size": 15}),
+    ("Is residence tract GEOID in WEDSS (2020 vintage), or only county/ZIP?", {"bullet": True, "size": 15}),
+    ("Who owns the data dictionary and field-completeness table?", {"bullet": True, "size": 15}),
+    ("2023 discharge-date backfill: yes or no, and by when?", {"bullet": True, "size": 15}),
+    ("Can we pull the fields on slide 6 (interview status, test method, ICU, disposition)?", {"bullet": True, "size": 15}),
 ], spacing=7)
 text(s, 6.9, 1.75, 6.0, 5.2, [
     ("Rachel, before late January", {"size": 19, "bold": True, "color": TEAL}),
@@ -299,7 +301,7 @@ text(s, 6.9, 1.75, 6.0, 5.2, [
     ("Confounder list and DAG; mark which are measured", {"bullet": True, "size": 15.5}),
     ("Table 1 by outcome; cases-by-month plot (24 months); LOS histogram (is it bimodal?)", {"bullet": True, "size": 15.5}),
     ("Power with real exposure prevalences (power_logistic())", {"bullet": True, "size": 15.5}),
-    ("Run check_case_input() on the extract and send me the printout (it contains no PII)", {"bullet": True, "size": 15.5}),
+    ("Run check_case_input() and make_analysis_file() on the extract; send me the de-identified file", {"bullet": True, "size": 15.5}),
     ("Schedule the 2nd committee meeting (after Jan 20/21)", {"bullet": True, "size": 15.5}),
 ], spacing=7)
 
@@ -312,7 +314,7 @@ rows = [["File", "What it does"],
         ["output/  (public covariates)", "County and tract tables, weather 2022-11 → 2025-12, storms, hospitals, HPSA, population by age"],
         ["CHANGES_v2.md", "Line-by-line list of fixes and new variables"]]
 table(s, 0.6, 1.8, 12.1, rows, [4.0, 8.1], size=14.5, row_h=0.66)
-text(s, 0.6, 6.0, 12, 0.8, ["Google Drive: Rachel Erickson / Legionnaires / legionella_external_data / v2_2026-11-13"], size=15, bold=True, color=TEAL)
+text(s, 0.6, 6.0, 12, 0.8, ["Google Drive: Rachel Erickson / Legionnaires / legionella_external_data / v2_2026-11-13 (CSVs in output/)"], size=15, bold=True, color=TEAL)
 
 prs.save("/home/user/Campinas_Dengue_Zika/legionnaires_update/deck/LD_project_update_for_Rachel_2026-11.pptx")
 print("saved")

@@ -20,12 +20,14 @@ Changes since v1 (2026-11-03, the version in `Rachel Erickson/Legionnaires/legio
 ## New functions
 
 * **`check_case_input(cases)`** — run first on the real extract. Prints only counts, so the printout can be shared.
-* **`make_analysis_file(cov, keep_geo = "county", date_detail = "year")`** — de-identified analysis file:
+* **`make_analysis_file(cov, keep_geo = "tract", date_detail = "month")`** — de-identified analysis file. Updated after Rachel's Nov 10 Teams note: DHS said she can share "anything without PII", and census tract is the resolution to use.
+  * `keep_geo`: `"tract"` (default) keeps `tract_geoid` and exact tract covariates; `"county"` drops tract IDs and turns `t_*` into statewide quintiles; `"none"` also drops county.
+  * `date_detail`: `"month"` (default) keeps onset year and month; `"year"`; `"date"` keeps the exact onset/anchor date, but only use it if DHS confirms dates are not PII for this release.
+  * **Re-identification check.** It prints how many records are unique on geography × time × sex × 10-year age band (k = 1). At tract + month, expect nearly every case to be unique. The file has no PII, but it isn't anonymous, and DHS should know that.
   * drops columns that look like direct identifiers (names, address, phone, MRN, DOB, ZIP, lat/lon, free text) and prints what it dropped so you can check;
   * age from DOB, top-coded at 90;
-  * every date becomes days relative to the anchor (onset) date (`admit_day`, `discharge_day`, `death_day`, …) plus `los_days`; calendar dates are removed and only `anchor_year` (and optionally month) is kept;
+  * every date becomes days relative to the anchor (onset) date (`admit_day`, `discharge_day`, `death_day`, …) plus `los_days`; calendar dates are removed;
   * random `study_id`; the case_id↔study_id crosswalk is returned as `attr(x, "crosswalk")` and **must stay in DHS**;
-  * tract IDs are always dropped. Tract covariates become statewide quintiles (`t_*_q5`), because an exact tract value is unique to a tract and so identifies it;
   * small-cell report for categorical variables (threshold `CONFIG$small_cell`, default 5; confirm with DHS).
 * **`county_rates(cases, age_col = "age")`** — the population-adjusted map table (aggregate only): cases, person-years, crude rate, **age-adjusted rate** (US 2000 standard, Fay–Feuer gamma CI), **SIR** (observed/expected from statewide age-specific rates, exact Poisson CI), **empirical-Bayes smoothed SIR** (Marshall 1991), and a small-cell flag.
 

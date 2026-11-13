@@ -28,7 +28,7 @@ options(legionella.no_autorun = TRUE); source("legionella_external_data.R")
 cases <- read.csv("weds_extract.csv")       # case_id, county (FIPS or name), onset_date, ...
 check_case_input(cases)                     # aggregate QA printout - safe to share
 cov   <- build_case_covariates(cases)       # + c_* county, t_* tract, wx_* lags, storm_*
-share <- make_analysis_file(cov, keep_geo = "county", date_detail = "year")
+share <- make_analysis_file(cov)            # tract + onset month (DHS: no PII, census tract OK)
 write.csv(share, "LD_analysis_deidentified.csv", row.names = FALSE)
 write.csv(attr(share, "crosswalk"), "crosswalk_KEEP_IN_DHS.csv", row.names = FALSE)
 rates <- county_rates(cases, age_col = "age")   # map table (aggregate)
@@ -59,4 +59,5 @@ rates <- county_rates(cases, age_col = "age")   # map table (aggregate)
 * Menominee County has no SDWIS row (EPA tribal primacy).
 * ERA5-Land is ~9 km resolution, sampled at the county centroid; tract-level weather would need `pull_weather()` on the tract table (~4 h) or gridded PRISM/gridMET.
 * Record `output/_run_metadata.txt` in the thesis methods section (run date and data vintages).
-* `make_analysis_file()` is a technical aid. What may leave DHS (date detail, geography, small-cell threshold) is DHS's decision.
+* `make_analysis_file()` is a technical aid. What may leave DHS (date detail, geography, small-cell threshold) is DHS's decision. Per Rachel (Teams, 2026-11-10), DHS cleared sharing anything without PII at census-tract resolution. Exact onset dates and the small-cell threshold are still to confirm.
+* Public CSVs are on Drive in `v2_2026-11-13/output/`. The daily weather file is split by year there (`weather_county_daily_<year>.csv`) to fit upload limits; stack them with `do.call(rbind, lapply(list.files(pattern = "^weather_county_daily_"), read.csv))`.

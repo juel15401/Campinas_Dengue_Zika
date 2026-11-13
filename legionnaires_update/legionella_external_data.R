@@ -1096,12 +1096,20 @@ county_rates <- function(cases, age_col = "age", out_dir = CONFIG$out_dir, per =
 #    * anchor year (and month if date_detail = "month") kept for season/trend
 #    * random study_id replaces case_id; the crosswalk is returned as an
 #      attribute and must stay inside DHS
-#    * geography: keep_geo = "county" keeps county_fips and c_* covariates;
-#      "none" drops county_fips (c_* still attached); tract IDs are always
-#      dropped, and t_* covariates are converted to statewide quintiles unless
-#      keep_tract_values = TRUE (exact tract values are unique to a tract, so
-#      they re-identify the tract just as well as the GEOID would)
-#    * prints a small-cell report for categorical variables
+#    * geography (DHS, Nov 2026: "anything without PII; census tract is the
+#      resolution to use"):
+#        keep_geo = "tract"  (default) keeps tract_geoid, county_fips and exact
+#                            t_* / c_* covariates
+#        keep_geo = "county" drops tract_geoid; t_* become statewide quintiles
+#                            (an exact tract value identifies the tract as well
+#                            as its GEOID does)
+#        keep_geo = "none"   also drops county_fips
+#    * dates: date_detail = "month" (default) keeps onset year + month;
+#      "year" keeps year only; "date" also keeps the exact anchor (onset) date -
+#      only if DHS confirms exact dates are not PII for this release.
+#    * prints a small-cell report for categorical variables and a
+#      re-identification check: how many records are unique on
+#      geography x time x sex x 10-year age group (k = 1)
 ###############################################################################
 PII_PATTERNS <- c("(^|_)name$", "^name", "first_?name", "last_?name", "middle", "address", "street",
                   "(^|_)addr", "^city$", "phone", "email", "(^|_)mrn", "medical_record", "ssn",
@@ -1109,10 +1117,11 @@ PII_PATTERNS <- c("(^|_)name$", "^name", "first_?name", "last_?name", "middle", 
                   "(^|_)(lon|lng|longitude)($|_)", "^x$", "^y$", "geocode", "contact_(name|phone|info)",
                   "guardian", "next_of_kin", "physician", "provider_name", "insurance_id", "medicaid_id",
                   "(^|_)notes?($|_)", "comment", "narrative", "free_?text", "county_raw")
-make_analysis_file <- function(x, keep_geo = c("county", "none"), date_detail = c("year", "month"),
-                               drop_cols = NULL, keep_cols = NULL, keep_tract_values = FALSE,
+make_analysis_file <- function(x, keep_geo = c("tract", "county", "none"), date_detail = c("month", "year", "date"),
+                               drop_cols = NULL, keep_cols = NULL, keep_tract_values = (keep_geo == "tract"),
                                out_dir = CONFIG$out_dir, seed = NULL) {
   keep_geo <- match.arg(keep_geo); date_detail <- match.arg(date_detail)
+  force(keep_tract_values)
   x <- as.data.frame(x, stringsAsFactors = FALSE)
   # age
   dob <- intersect(c("dob", "date_of_birth", "birth_date"), names(x))[1]
@@ -1126,14 +1135,16 @@ make_analysis_file <- function(x, keep_geo = c("county", "none"), date_detail = 
   }
   if (all(c("admit_day", "discharge_day") %in% names(x))) x$los_days <- x$discharge_day - x$admit_day
   x$anchor_year <- as.integer(format(x$anchor_date, "%Y"))
-  if (date_detail == "month") x$anchor_month <- as.integer(format(x$anchor_date, "%m")) else
+  if (date_detail %in% c("month", "date")) x$anchor_month <- as.integer(format(x$anchor_date, "%m")) else
     x <- x[, setdiff(names(x), c("anchor_month", "mmwr_week")), drop = FALSE]
+  if (date_detail == "date") x$onset_or_anchor_date <- format(x$anchor_date, "%Y-%m-%d")
   date_cols <- names(x)[vapply(x, inherits, logical(1), c("Date", "POSIXt"))]
   # identifiers
   low <- tolower(names(x))
   pii <- names(x)[Reduce(`|`, lapply(PII_PATTERNS, grepl, x = low))]
   pii <- setdiff(pii, c(grep("^(c|t)_", names(x), value = TRUE), keep_cols))   # covariates are not PII
-  drop <- unique(c(pii, date_cols, drop_cols, "tract_geoid", if (keep_geo == "none") "county_fips"))
+  drop <- unique(c(pii, date_cols, drop_cols, if (keep_geo != "tract") "tract_geoid",
+                   if (keep_geo == "none") "county_fips"))
   drop <- setdiff(intersect(drop, names(x)), keep_cols)
   message("make_analysis_file(): dropping ", length(drop), " column(s): ", paste(drop, collapse = ", "))
   # tract covariates -> quintiles of the statewide tract distribution
@@ -1164,6 +1175,18 @@ make_analysis_file <- function(x, keep_geo = c("county", "none"), date_detail = 
     if (length(t)) data.frame(variable = cc, level = names(t), n = as.integer(t)) else NULL
   }))
   if (!is.null(sc) && nrow(sc)) { message("Small cells (< ", CONFIG$small_cell, "):"); print(sc, row.names = FALSE) }
+  # re-identification check: records unique on geography x time x sex x age band
+  geo_k  <- intersect(c(if (keep_geo == "tract") "tract_geoid", if (keep_geo != "none") "county_fips"), names(x))[1]
+  time_k <- intersect(c(if (date_detail == "date") "onset_or_anchor_date", "anchor_month", "anchor_year"), names(x))
+  qi <- c(geo_k, time_k, intersect(c("sex", "gender"), names(x))[1])
+  qi <- qi[!is.na(qi)]
+  key <- do.call(paste, c(lapply(qi, function(q) x[[q]]),
+                          if ("age" %in% names(x)) list(floor(x$age / 10)), sep = "|"))
+  k1 <- sum(table(key) == 1)
+  message("Re-identification check on {", paste(c(qi, if ("age" %in% names(x)) "age/10"), collapse = ", "), "}: ",
+          k1, " of ", nrow(x), " records are unique (k = 1)",
+          if (k1 > 0.2 * nrow(x)) " - consider date_detail = 'year' or keep_geo = 'county' if DHS requires k > 1" else "")
+  attr(x, "k1_records") <- k1
   attr(x, "crosswalk") <- crosswalk          # KEEP INSIDE DHS
   attr(x, "small_cells") <- sc
   x
